@@ -48,3 +48,92 @@ A função `handleControl` processa os comandos recebidos e controla o relé de 
 # Verifique o funcionamento
 1. Após o upload, abra o **Serial Monitor** (`Ctrl+Shift+M`) para ver as mensagens de depuração.
 2. Verifique se a Wemos D1 se conecta ao Wi-Fi e inicia o servidor web.
+
+
+--
+Aqui está o texto em formato Markdown (`.md`) e, em seguida, vou te explicar como criar o diagrama visual.
+
+---
+
+### **Circuito para Montagem com Lâmpada de 127V**
+
+#### **Componentes Necessários:**
+1. **Wemos D1** (ESP8266).
+2. **Módulo Relé 5V** (compatível com a Wemos D1).
+3. **Lâmpada de 127V**.
+4. **Fonte de Alimentação 127V** (tomada).
+5. **Jumpers e Protoboard** (para conexões de baixa tensão).
+6. **Diodo 1N4007** (opcional, para proteção do relé).
+
+---
+
+### **Esquema do Circuito**
+
+1. **Conexão da Wemos D1 ao Relé:**
+   - **Pino D1** da Wemos D1 → **Pino de Sinal (IN)** do relé.
+   - **GND** da Wemos D1 → **GND** do relé.
+   - **VCC (5V)** da Wemos D1 → **VCC** do relé.
+
+2. **Conexão do Relé à Lâmpada de 127V:**
+   - **Terminal COM (Common)** do relé → **Fase (Live)** da tomada 127V.
+   - **Terminal NO (Normally Open)** do relé → **Fio da Lâmpada**.
+   - **Neutro (Neutral)** da tomada 127V → **Neutro da Lâmpada**.
+
+3. **Alimentação da Wemos D1:**
+   - Conecte a Wemos D1 ao computador ou a um carregador USB para alimentação.
+
+---
+
+### **Diagrama Visual**
+
+Aqui está uma descrição textual do circuito. Para criar um diagrama visual, você pode usar ferramentas como **Fritzing**, **Tinkercad** ou **EasyEDA**:
+
+1. **Wemos D1:**
+   - Conecte o **pino D1** ao **pino IN** do relé.
+   - Conecte o **GND** da Wemos ao **GND** do relé.
+   - Conecte o **5V** da Wemos ao **VCC** do relé.
+
+2. **Relé:**
+   - Conecte o **COM** do relé ao **fio fase** da tomada 127V.
+   - Conecte o **NO** do relé ao **fio da lâmpada**.
+   - Conecte o **neutro** da tomada diretamente ao **neutro da lâmpada**.
+
+3. **Lâmpada de 127V:**
+   - Conecte os fios da lâmpada ao relé e à tomada, como descrito acima.
+
+---
+
+### **Funcionamento do Circuito:**
+- Quando a Wemos D1 recebe o comando `on`, o pino `D1` é colocado em **LOW**, ativando o relé e ligando a lâmpada.
+- Quando a Wemos D1 recebe o comando `off`, o pino `D1` é colocado em **HIGH**, desativando o relé e desligando a lâmpada.
+
+---
+
+### **Cuidados Importantes:**
+1. **Alta Tensão (127V):**
+   - **Tome muito cuidado** ao fazer as conexões de alta tensão. Use fiação adequada e isole bem os fios.
+   - Se não tiver experiência com alta tensão, recomendo pedir ajuda a alguém com conhecimento.
+
+2. **Proteção do Relé:**
+   - Para proteger o relé de picos de tensão, adicione um diodo (como o 1N4007) em paralelo com a bobina do relé.
+
+---
+
+### **Próximos Passos:**
+1. Monte o circuito conforme o esquema.
+2. Conecte a Wemos D1 ao computador e carregue o código `.ino`.
+3. Teste o sistema enviando comandos da interface HTML.
+
+---
+
+### **Como Criar o Diagrama Visual:**
+1. Use uma ferramenta como **Fritzing** ou **Tinkercad**.
+2. Adicione os componentes (Wemos D1, relé, lâmpada, fiação).
+3. Conecte os componentes conforme o esquema descrito.
+4. Exporte o diagrama como imagem (PNG ou JPG).
+
+Se precisar de ajuda para criar o diagrama visual, é só avisar! 😊
+
+---
+
+Salve o texto acima em um arquivo com a extensão `.md`, por exemplo, `circuito_lampada.md`.
