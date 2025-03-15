@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Lâmpada</title>
+</head>
+<body>
+    <h1>Controle de Lâmpada</h1>
+    
+    <button onclick="sendCommand('on')">Ligar</button>
+    <button onclick="sendCommand('off')">Desligar</button>
+
+    <h2>Status: <span id="lampStatus">Desconhecido</span></h2>
+
+    <h2>Desligar em:</h2>
+    <input type="number" id="timer" placeholder="Minutos">
+    <button onclick="setTimer()">Definir Timer</button>
+
+    <h2>Histórico de Comandos:</h2>
+    <ul id="history"></ul>
+
+    <script>
+        async function sendCommand(action) {
+            const timer = action === 'on' ? document.getElementById('timer').value : 0;
+            await fetch('/lamp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, timer })
+            });
+            updateStatus();
+        }
+
+        async function setTimer() {
+            const minutes = document.getElementById('timer').value;
+            if (minutes > 0) {
+                sendCommand('on');
+            }
+        }
+
+        async function updateStatus() {
+            const response = await fetch('/status');
+            const { lampState, commandHistory } = await response.json();
+            
+            document.getElementById('lampStatus').innerText = lampState === 'on' ? 'Ligada' : 'Desligada';
+            const historyList = document.getElementById('history');
+            historyList.innerHTML = '';
+
+            commandHistory.forEach(entry => {
+                const li = document.createElement('li');
+                li.textContent = entry;
+                historyList.appendChild(li);
+            });
+        }
+
+        setInterval(updateStatus, 10000); // Atualiza a cada 3 segundos
+        updateStatus();
+    </script>
+</body>
+</html>
+
