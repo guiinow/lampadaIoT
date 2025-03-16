@@ -132,8 +132,3 @@ Aqui está uma descrição textual do circuito. Para criar um diagrama visual, v
 3. Conecte os componentes conforme o esquema descrito.
 4. Exporte o diagrama como imagem (PNG ou JPG).
 
-Se precisar de ajuda para criar o diagrama visual, é só avisar! 😊
-
----
-
-Salve o texto acima em um arquivo com a extensão `.md`, por exemplo, `circuito_lampada.md`.
