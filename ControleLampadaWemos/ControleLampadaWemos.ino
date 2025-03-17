@@ -1,124 +1,99 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <fauxmoESP.h> // Biblioteca para integração com Alexa
 
 // Configurações de Wi-Fi
-const char *ssid = "SEU_SSID";      // Substitua pelo nome da sua rede Wi-Fi
-const char *password = "SUA_SENHA"; // Substitua pela senha da sua rede Wi-Fi
+const char* ssid = "SEU_SSID"; // Nome da sua rede Wi-Fi
+const char* password = "SUA_SENHA"; // Senha da sua rede Wi-Fi
 
 // Pinos
 const int relayPin = D1; // Pino do relé
-const int micPin = A0;   // Pino do microfone analógico
 
-// Limiar de som para detectar o acionamento (ajuste conforme necessário)
-const int soundThreshold = 500;
-
-// Ruído de fundo: ~300
-// Som alto (palma ou estalo): ~800
-
-// Cria uma instância do servidor web na porta 80
+// Cria uma instância do servidor web
 ESP8266WebServer server(80);
+
+// Cria uma instância do FauxmoESP (Alexa)
+fauxmoESP fauxmo;
 
 // Variável para armazenar o estado da lâmpada
 bool lampState = false;
 
-// Função para alternar a lâmpada
-void toggleLamp()
-{
-  lampState = !lampState;
-  digitalWrite(relayPin, lampState ? LOW : HIGH);
+// Função para alternar o estado da lâmpada
+void setLamp(bool state) {
+    lampState = state;
+    digitalWrite(relayPin, lampState ? LOW : HIGH); // Relé ativo em LOW
+    Serial.println(lampState ? "Lâmpada ligada" : "Lâmpada desligada");
 }
 
-void setup()
-{
-  // Inicializa a comunicação serial
-  Serial.begin(115200);
+void setup() {
+    // Inicializa a comunicação serial
+    Serial.begin(115200);
 
-  // Configura o pino do relé como saída
-  pinMode(relayPin, OUTPUT);
-  digitalWrite(relayPin, HIGH); // Inicia com o relé desligado
+    // Configura o pino do relé como saída
+    pinMode(relayPin, OUTPUT);
+    digitalWrite(relayPin, HIGH); // Começa com a lâmpada desligada
 
-  // Conecta ao Wi-Fi
-  WiFi.begin(ssid, password);
-  Serial.print("Conectando ao Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(1000);
-    Serial.print(".");
-  }
-  Serial.println("\nConectado ao Wi-Fi");
-  Serial.println(WiFi.localIP());
-
-  // Configura as rotas do servidor web
-  server.on("/", handleRoot);
-  server.on("/control", handleControl);
-  server.on("/status", handleStatus);
-
-  // Inicia o servidor web
-  server.begin();
-  Serial.println("Servidor web iniciado");
-}
-
-void loop()
-{
-  // Mantém o servidor web ativo
-  server.handleClient();
-
-  // Lê o valor do microfone
-  int micValue = analogRead(micPin);
-  // O analogRead(micPin) retorna valores entre 0 e 1023(10 bits de resolução do ADC do ESP8266).
-
-    // Se o som ultrapassar o limiar, alterna a lâmpada
-    if (micValue > soundThreshold)
-  {
-    toggleLamp();
-    Serial.println("Som detectado! Alternando lâmpada.");
-    delay(500); // Pequeno atraso para evitar múltiplas detecções rápidas
-  }
-
-  int micValue = analogRead(micPin);
-  Serial.println(micValue);
-  delay(100);
-}
-
-// Função para lidar com a rota principal
-void handleRoot()
-{
-  server.send(200, "text/plain", "Bem-vindo ao controle de lâmpada!");
-}
-
-// Função para lidar com a rota de controle da lâmpada
-void handleControl()
-{
-  if (server.method() == HTTP_POST)
-  {
-    String command = server.arg("command");
-
-    if (command == "on")
-    {
-      digitalWrite(relayPin, LOW); // Liga a lâmpada
-      lampState = true;
-      server.send(200, "text/plain", "Lâmpada ligada");
+    // Conecta ao Wi-Fi
+    WiFi.begin(ssid, password);
+    Serial.print("Conectando ao Wi-Fi");
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(1000);
+        Serial.print(".");
     }
-    else if (command == "off")
-    {
-      digitalWrite(relayPin, HIGH); // Desliga a lâmpada
-      lampState = false;
-      server.send(200, "text/plain", "Lâmpada desligada");
-    }
-    else
-    {
-      server.send(400, "text/plain", "Comando inválido");
-    }
-  }
-  else
-  {
-    server.send(405, "text/plain", "Método não permitido");
-  }
+    Serial.println("\nConectado ao Wi-Fi");
+    Serial.println(WiFi.localIP());
+
+    // Configura as rotas do servidor web
+    server.on("/", handleRoot);
+    server.on("/control", handleControl);
+    server.on("/status", handleStatus);
+
+    // Inicia o servidor web
+    server.begin();
+    Serial.println("Servidor web iniciado");
+
+    // Configura o dispositivo para Alexa
+    fauxmo.addDevice("lampada"); // Nome que a Alexa reconhecerá
+    fauxmo.onSetState([](unsigned char device_id, const char *device_name, bool state, unsigned char value) {
+        Serial.printf("[Alexa] Comando recebido para: %s\n", device_name);
+        setLamp(state);
+    });
 }
 
-// Função para lidar com a rota de status da lâmpada
-void handleStatus()
-{
-  String status = lampState ? "on" : "off";
-  server.send(200, "text/plain", status);
+void loop() {
+    // Mantém o servidor web ativo
+    server.handleClient();
+
+    // Atualiza o fauxmo para responder à Alexa
+    fauxmo.handle();
+}
+
+// Função para a rota principal
+void handleRoot() {
+    server.send(200, "text/plain", "Bem-vindo ao controle de lâmpada!");
+}
+
+// Função para controlar a lâmpada via POST
+void handleControl() {
+    if (server.method() == HTTP_POST) {
+        String command = server.arg("command");
+
+        if (command == "on") {
+            setLamp(true);
+            server.send(200, "text/plain", "Lâmpada ligada");
+        } else if (command == "off") {
+            setLamp(false);
+            server.send(200, "text/plain", "Lâmpada desligada");
+        } else {
+            server.send(400, "text/plain", "Comando inválido");
+        }
+    } else {
+        server.send(405, "text/plain", "Método não permitido");
+    }
+}
+
+// Função para retornar o status da lâmpada
+void handleStatus() {
+    String status = lampState ? "on" : "off";
+    server.send(200, "text/plain", status);
 }
