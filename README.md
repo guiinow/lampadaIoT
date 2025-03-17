@@ -98,8 +98,6 @@ Aqui está uma descrição textual do circuito. Para criar um diagrama visual, v
    - Conecte o **NO** do relé ao **fio da lâmpada**.
    - Conecte o **neutro** da tomada diretamente ao **neutro da lâmpada**.
 
-3. **Lâmpada de 127V:**
-   - Conecte os fios da lâmpada ao relé e à tomada, como descrito acima.
 
 ---
 
@@ -109,26 +107,14 @@ Aqui está uma descrição textual do circuito. Para criar um diagrama visual, v
 
 ---
 
-### **Cuidados Importantes:**
-1. **Alta Tensão (127V):**
-   - **Tome muito cuidado** ao fazer as conexões de alta tensão. Use fiação adequada e isole bem os fios.
-   - Se não tiver experiência com alta tensão, recomendo pedir ajuda a alguém com conhecimento.
 
-2. **Proteção do Relé:**
+1. **Proteção do Relé:**
    - Para proteger o relé de picos de tensão, adicione um diodo (como o 1N4007) em paralelo com a bobina do relé.
 
 ---
 
-### **Próximos Passos:**
-1. Monte o circuito conforme o esquema.
-2. Conecte a Wemos D1 ao computador e carregue o código `.ino`.
-3. Teste o sistema enviando comandos da interface HTML.
 
----
+Como ligar uma lampada com relé:
+https://www.youtube.com/watch?v=dPffe7HvyBE
 
-### **Como Criar o Diagrama Visual:**
-1. Use uma ferramenta como **Fritzing** ou **Tinkercad**.
-2. Adicione os componentes (Wemos D1, relé, lâmpada, fiação).
-3. Conecte os componentes conforme o esquema descrito.
-4. Exporte o diagrama como imagem (PNG ou JPG).
-
+Projeto no Tinkercad: https://www.tinkercad.com/things/4tZLbfxSfTW/editel?sharecode=az9ygDZ3AJ-f6Z3BsYOX2g1nxCJR06t5jxiKztGDQuI
