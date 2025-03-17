@@ -1,120 +1,131 @@
-# Explicação do Código
+# 📡 Controle de Lâmpada com Wemos D1, Wi-Fi e Alexa
 
-## Conexão Wi-Fi
-O código começa conectando a Wemos D1 à rede Wi-Fi usando as credenciais fornecidas (`ssid` e `password`).
+Este projeto permite controlar uma lâmpada usando a placa **Wemos D1 (ESP8266)** de duas maneiras:
 
-## Controle do Relé
-O relé está conectado ao pino `D1` da Wemos D1. O relé é controlado por meio dos comandos `digitalWrite(relayPin, LOW)` para ligar e `digitalWrite(relayPin, HIGH)` para desligar. Isso depende do tipo de relé que você está usando (ativo em LOW ou HIGH).
+1. **Via Wi-Fi**: Através de requisições POST em um servidor web local.
+2. **Via Alexa**: Usando comandos de voz através do app da Alexa ou dispositivos compatíveis.
 
-## Servidor Web
-O servidor web é configurado para responder a três rotas:
-
-- **`/`**: Rota principal que retorna uma mensagem de boas-vindas.
-- **`/control`**: Rota que recebe comandos POST para ligar (`on`) ou desligar (`off`) a lâmpada.
-- **`/status`**: Rota que retorna o status atual da lâmpada (`on` ou `off`).
-
-## Manipulação de Requisições
-A função `handleControl` processa os comandos recebidos e controla o relé de acordo. A função `handleStatus` retorna o estado atual da lâmpada.
-
-# Como Funciona
-- Quando você envia uma requisição POST para a rota `/control` com o comando `on` ou `off`, a Wemos D1 altera o estado do relé e, consequentemente, da lâmpada.
-- A rota `/status` pode ser usada para verificar o estado atual da lâmpada.
-
-# Testes e Melhorias
-- **Status em Tempo Real**: Você pode atualizar a interface HTML para consultar periodicamente a rota `/status` e exibir o estado atual da lâmpada.
-- **Timer**: Implemente um temporizador na Wemos D1 ou no servidor Node.js para desligar a lâmpada após um determinado tempo.
-- **Histórico de Comandos**: Adicione uma funcionalidade no servidor Node.js para registrar as ações e exibi-las na interface.
-
-# Próximos Passos
-1. Carregue o código na Wemos D1.
-2. Certifique-se de que o servidor Node.js está configurado para enviar os comandos corretos para a Wemos D1.
-3. Teste o fluxo completo (interface → servidor → Wemos → lâmpada).
-
-# Configure o Arduino IDE para a Wemos D1
-1. **Instale o pacote do ESP8266 no Arduino IDE** (se ainda não tiver feito):
-   - Vá em `Arquivo` → `Preferências`.
-   - No campo "URLs Adicionais para Gerenciadores de Placas", adicione: `http://arduino.esp8266.com/stable/package_esp8266com_index.json`.
-   - Clique em `OK`.
-   - Vá em `Ferramentas` → `Placa` → `Gerenciador de Placas`.
-   - Procure por `esp8266` e instale a versão mais recente.
-2. **Selecione a placa correta**:
-   - Vá em `Ferramentas` → `Placa` → `ESP8266 Boards` → `Wemos D1 R1`.
-
-# Carregue o código na Wemos D1
-1. Conecte a Wemos D1 ao computador via USB.
-2. No Arduino IDE, selecione a porta correta em `Ferramentas` → `Porta`.
-3. Clique no botão de upload (seta para a direita) para carregar o código na placa.
-
-# Verifique o funcionamento
-1. Após o upload, abra o **Serial Monitor** (`Ctrl+Shift+M`) para ver as mensagens de depuração.
-2. Verifique se a Wemos D1 se conecta ao Wi-Fi e inicia o servidor web.
-
-
---
-Aqui está o texto em formato Markdown (`.md`) e, em seguida, vou te explicar como criar o diagrama visual.
+## 📋 Funcionalidades
+- **Ligar/Desligar a lâmpada** através de comandos HTTP.
+- **Integração com Alexa** utilizando a biblioteca **FauxmoESP**.
+- **Consultar o status atual** da lâmpada.
 
 ---
 
-### **Circuito para Montagem com Lâmpada de 127V**
-
-#### **Componentes Necessários:**
-1. **Wemos D1** (ESP8266).
-2. **Módulo Relé 5V** (compatível com a Wemos D1).
-3. **Lâmpada de 127V**.
-4. **Fonte de Alimentação 127V** (tomada).
-5. **Jumpers e Protoboard** (para conexões de baixa tensão).
-6. **Diodo 1N4007** (opcional, para proteção do relé).
+## 🛠️ Componentes Necessários
+- **Wemos D1 (ESP8266)**
+- **Módulo Relé 5V** (compatível com a Wemos D1)
+- **Lâmpada (127V ou 220V)**
+- **Fonte de alimentação USB (5V)**
+- **Jumpers e Protoboard**
 
 ---
 
-### **Esquema do Circuito**
+## 📊 Esquema de Ligação
 
-1. **Conexão da Wemos D1 ao Relé:**
-   - **Pino D1** da Wemos D1 → **Pino de Sinal (IN)** do relé.
-   - **GND** da Wemos D1 → **GND** do relé.
-   - **VCC (5V)** da Wemos D1 → **VCC** do relé.
+1. **Conexão do Relé com a Wemos D1:**
+   - **D1** → **Pino de Sinal (IN)** do Relé
+   - **GND** → **GND** do Relé
+   - **5V** → **VCC** do Relé
 
-2. **Conexão do Relé à Lâmpada de 127V:**
-   - **Terminal COM (Common)** do relé → **Fase (Live)** da tomada 127V.
-   - **Terminal NO (Normally Open)** do relé → **Fio da Lâmpada**.
-   - **Neutro (Neutral)** da tomada 127V → **Neutro da Lâmpada**.
-
-3. **Alimentação da Wemos D1:**
-   - Conecte a Wemos D1 ao computador ou a um carregador USB para alimentação.
-
----
-
-### **Diagrama Visual**
-
-Aqui está uma descrição textual do circuito. Para criar um diagrama visual, você pode usar ferramentas como **Fritzing**, **Tinkercad** ou **EasyEDA**:
-
-1. **Wemos D1:**
-   - Conecte o **pino D1** ao **pino IN** do relé.
-   - Conecte o **GND** da Wemos ao **GND** do relé.
-   - Conecte o **5V** da Wemos ao **VCC** do relé.
-
-2. **Relé:**
-   - Conecte o **COM** do relé ao **fio fase** da tomada 127V.
-   - Conecte o **NO** do relé ao **fio da lâmpada**.
-   - Conecte o **neutro** da tomada diretamente ao **neutro da lâmpada**.
+2. **Conexão do Relé com a Lâmpada:**
+   - **COM** → **Fase da tomada (127V/220V)**
+   - **NO** → **Fio da lâmpada**
+   - **Neutro** da lâmpada → **Neutro da tomada**
 
 
 ---
 
-### **Funcionamento do Circuito:**
-- Quando a Wemos D1 recebe o comando `on`, o pino `D1` é colocado em **LOW**, ativando o relé e ligando a lâmpada.
-- Quando a Wemos D1 recebe o comando `off`, o pino `D1` é colocado em **HIGH**, desativando o relé e desligando a lâmpada.
+## 🚀 Configuração do Ambiente
+
+### 1. Instalar o pacote ESP8266 no Arduino IDE:
+1. Vá para: `Arquivo` → `Preferências`
+2. No campo **URLs Adicionais para Gerenciadores de Placas**, adicione:
+
+```
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
+```
+
+3. Em `Ferramentas` → `Placa` → `Gerenciador de Placas`, pesquise **esp8266** e instale.
+
+### 2. Instalar a biblioteca FauxmoESP:
+- Vá em: `Ferramentas` → `Gerenciar Bibliotecas`
+- Pesquise por **FauxmoESP** e instale a versão mais recente.
 
 ---
 
+## 📄 Como Carregar o Código na Wemos D1
 
-1. **Proteção do Relé:**
-   - Para proteger o relé de picos de tensão, adicione um diodo (como o 1N4007) em paralelo com a bobina do relé.
+1. Conecte a **Wemos D1** ao seu computador via USB.
+2. No **Arduino IDE**, selecione:
+   - Placa: `Wemos D1 R1`
+   - Porta: A porta serial correspondente.
+3. Atualize as configurações de Wi-Fi no código:
+
+```cpp
+const char* ssid = "SEU_SSID";      // Nome da sua rede Wi-Fi
+const char* password = "SUA_SENHA"; // Senha da sua rede Wi-Fi
+```
+
+4. Clique em **Upload** para enviar o código para a placa.
 
 ---
 
+## 🔎 Testando o Sistema
 
-Como ligar uma lampada com relé:
-https://www.youtube.com/watch?v=dPffe7HvyBE
+### 1. Verificar a Conexão com o Wi-Fi
+Após o upload do código, abra o **Serial Monitor** (`Ctrl + Shift + M`) e verifique:
 
-Projeto no Tinkercad: https://www.tinkercad.com/things/4tZLbfxSfTW/editel?sharecode=az9ygDZ3AJ-f6Z3BsYOX2g1nxCJR06t5jxiKztGDQuI
+```
+Conectando ao Wi-Fi...
+Conectado ao Wi-Fi
+Endereço IP: 192.168.x.x
+```
+
+### 2. Controlar a Lâmpada via Wi-Fi
+- Envie uma requisição **POST** para o IP da Wemos:
+
+#### Para ligar a lâmpada:
+```bash
+curl -X POST http://192.168.x.x/control -d "command=on"
+```
+
+#### Para desligar a lâmpada:
+```bash
+curl -X POST http://192.168.x.x/control -d "command=off"
+```
+
+#### Para verificar o status da lâmpada:
+```bash
+curl http://192.168.x.x/status
+```
+
+### 3. Controlar a Lâmpada via Alexa
+
+1. No **app da Alexa**, vá em:
+   - **Dispositivos** → **Adicionar dispositivo** → **Luz** → **Outro**
+   - Clique em **Detectar dispositivos**
+
+2. Após a detecção, você poderá usar comandos como:
+   - "Alexa, ligue a lâmpada"
+   - "Alexa, desligue a lâmpada"
+
+---
+
+## 🔧 Resolução de Problemas
+
+1. **A Alexa não encontra o dispositivo:**
+   - Certifique-se de que o dispositivo está na **mesma rede Wi-Fi** que o app da Alexa.
+   - Reinicie a Wemos D1.
+
+2. **A lâmpada não liga/desliga:**
+   - Verifique a **conexão do relé**.
+   - Certifique-se de que o relé é compatível com **nível lógico de 3,3V**.
+
+---
+
+## 📌 Recursos Adicionais
+
+- **Documentação do FauxmoESP:** https://github.com/vintlabs/fauxmoESP
+- **Exemplo de controle Wi-Fi com ESP8266:** https://arduino-esp8266.readthedocs.io/
+
