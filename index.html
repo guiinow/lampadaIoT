@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Controle de Lâmpada</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Controle de Lâmpada</h1>
     
-    <button onclick="sendCommand('on')">Ligar</button>
-    <button onclick="sendCommand('off')">Desligar</button>
+    <button id="on" onclick="sendCommand('on')">Ligar</button>
+    <button id="off" onclick="sendCommand('off')">Desligar</button>
 
-    <h2>Status: <span id="lampStatus">Desconhecido</span></h2>
+    <h2>Status: <span id="lampStatus" class="off">Desconhecido</span></h2>
 
     <h2>Desligar em:</h2>
     <input type="number" id="timer" placeholder="Minutos">
-    <button onclick="setTimer()">Definir Timer</button>
+    <button id="setTimer" onclick="setTimer()">Definir Timer</button>
 
     <h2>Histórico de Comandos:</h2>
     <ul id="history"></ul>
@@ -41,7 +42,10 @@
             const response = await fetch('/status');
             const { lampState, commandHistory } = await response.json();
             
-            document.getElementById('lampStatus').innerText = lampState === 'on' ? 'Ligada' : 'Desligada';
+            const lampStatus = document.getElementById('lampStatus');
+            lampStatus.innerText = lampState === 'on' ? 'Ligada' : 'Desligada';
+            lampStatus.className = lampState === 'on' ? 'on' : 'off';
+
             const historyList = document.getElementById('history');
             historyList.innerHTML = '';
 
@@ -52,9 +56,11 @@
             });
         }
 
-        setInterval(updateStatus, 10000); // Atualiza a cada 3 segundos
+        setInterval(updateStatus, 10000); // Atualiza a cada 10 segundos
         updateStatus();
     </script>
+
+    <h4>Código do projeto no Github:</h4>
+    <a href="https://github.com/guiinow/lampadaIoT" target="_blank">Acesse o repositório</a>
 </body>
 </html>
-

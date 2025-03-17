@@ -1,0 +1,67 @@
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #f4f4f9;
+    margin-top: 50px;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button#on {
+    background-color: #388E3C;
+}
+
+button#off {
+    background-color: #D32F2F;
+}
+
+button#setTimer {
+    background-color: #007BFF;
+    /* Cor azul mais escura */
+    color: white;
+    /* Cor do texto branca para melhor contraste */
+}
+
+input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#lampStatus.on {
+    color: #388E3C;
+}
+
+#lampStatus.off {
+    color: #D32F2F;
+}
+
+#history {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+li {
+    margin: 5px 0;
+}
