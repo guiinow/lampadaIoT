@@ -132,12 +132,3 @@ Aqui está uma descrição textual do circuito. Para criar um diagrama visual, v
 3. Conecte os componentes conforme o esquema descrito.
 4. Exporte o diagrama como imagem (PNG ou JPG).
 
-Se precisar de ajuda para criar o diagrama visual, é só avisar! 😊
-
----
-
-
-Como ligar uma lampada com relé:
-https://www.youtube.com/watch?v=dPffe7HvyBE
-
-Projeto no Tinkercad: https://www.tinkercad.com/things/4tZLbfxSfTW/editel?sharecode=az9ygDZ3AJ-f6Z3BsYOX2g1nxCJR06t5jxiKztGDQuI
