@@ -52,6 +52,8 @@ http://arduino.esp8266.com/stable/package_esp8266com_index.json
 - Vá em: `Ferramentas` → `Gerenciar Bibliotecas`
 - Pesquise por **FauxmoESP** e instale a versão mais recente.
 
+### 3. Pra corrigir erro que tava dando
+tem de incluir o arquivo .zip via IDE ao arduino
 ---
 
 ## 📄 Como Carregar o Código na Wemos D1
@@ -85,19 +87,30 @@ Endereço IP: 192.168.x.x
 ### 2. Controlar a Lâmpada via Wi-Fi
 - Envie uma requisição **POST** para o IP da Wemos:
 
+Lembre-se de verificar qual é o ip da sua placa, essa informação tá no monitor serial.
+
+#### Para verificar o inicio:
+```bash
+curl http://192.168.1.19:8080
+
+```
+
 #### Para ligar a lâmpada:
 ```bash
-curl -X POST http://192.168.x.x/control -d "command=on"
+curl -X POST http://192.168.1.19:8080/control -H "Content-Type: application/x-www-form-urlencoded" -d "command=on"
+
 ```
 
 #### Para desligar a lâmpada:
 ```bash
-curl -X POST http://192.168.x.x/control -d "command=off"
+curl -X POST http://192.168.1.19:8080/control -H "Content-Type: application/x-www-form-urlencoded" -d "command=off"
+
 ```
 
 #### Para verificar o status da lâmpada:
 ```bash
-curl http://192.168.x.x/status
+curl http://192.168.1.19:8080/status
+
 ```
 
 ### 3. Controlar a Lâmpada via Alexa

@@ -3,14 +3,15 @@
 #include <fauxmoESP.h> // Biblioteca para integração com Alexa
 
 // Configurações de Wi-Fi
-const char* ssid = "SEU_SSID"; // Nome da sua rede Wi-Fi
-const char* password = "SUA_SENHA"; // Senha da sua rede Wi-Fi
+const char* ssid = "MansaoLuxuria_2.4G"; // Nome da sua rede Wi-Fi, DA SUA CASA
+const char* password = "luXuria.1010"; // Senha da sua rede Wi-Fi, DA SUA CASA
+
+// Cria uma instância do servidor web
+ESP8266WebServer server(8080);
 
 // Pinos
 const int relayPin = D1; // Pino do relé
 
-// Cria uma instância do servidor web
-ESP8266WebServer server(80);
 
 // Cria uma instância do FauxmoESP (Alexa)
 fauxmoESP fauxmo;
@@ -28,10 +29,6 @@ void setLamp(bool state) {
 void setup() {
     // Inicializa a comunicação serial
     Serial.begin(115200);
-
-    // Configura o pino do relé como saída
-    pinMode(relayPin, OUTPUT);
-    digitalWrite(relayPin, HIGH); // Começa com a lâmpada desligada
 
     // Conecta ao Wi-Fi
     WiFi.begin(ssid, password);
@@ -58,6 +55,10 @@ void setup() {
         Serial.printf("[Alexa] Comando recebido para: %s\n", device_name);
         setLamp(state);
     });
+
+    // Configura o pino do relé como saída
+    pinMode(relayPin, OUTPUT);
+    digitalWrite(relayPin, HIGH); // Começa com a lâmpada desligada
 }
 
 void loop() {
